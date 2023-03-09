@@ -1,0 +1,21 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-radius: 4px;
+  padding: 4px;
+  gap: 8px;
+}
+
+.button {
+  padding: 16px 0;
+
+  &.large {
+    grid-column: span 2;
+  }
+
+  &.active {
+    &:hover {
+      background-color: red;
+    }
+  }
+}

@@ -1,0 +1,33 @@
+.button {
+  border: none;
+  box-shadow: 0 0 0 1px #e2e3e5;
+  border-radius: 4px;
+  background-color: #fff;
+  font-weight: 500;
+  font-size: 14px;
+  transition: 0.2s ease;
+
+  &.secondary {
+    color: #fff;
+    box-shadow: none;
+    background-color: #5d5fef;
+    &:hover {
+      box-shadow: inset 0 0 0 2px #5d5fef;
+      background-color: #fff;
+      color: #000;
+    }
+    &:disabled {
+      color: #fff;
+    }
+  }
+
+  &:hover {
+    box-shadow: 0 0 0 2px #5d5fef;
+    cursor: pointer;
+  }
+
+  &:disabled {
+    pointer-events: none;
+    color: inherit;
+  }
+}
