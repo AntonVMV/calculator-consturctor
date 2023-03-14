@@ -1,5 +1,5 @@
 import { CalculatorElems } from "store/slices/mainSlice";
-import { Digits } from "./Digits/Digits";
+import { Operators } from "./Operators/Operators";
 import { Numbers } from "./Numbers/Numbers";
 import { Result } from "./Result/Result";
 import { Display } from "./Display/Display";
@@ -15,8 +15,8 @@ export const CalculatorElements: React.FC<CalculatorElementsProps> = ({
 }) => {
   return (
     <>
-      {type === "table" && <Display />}
-      {type === "digits" && <Digits isActive={isActive} />}
+      {type === "display" && <Display />}
+      {type === "operators" && <Operators isActive={isActive} />}
       {type === "numbers" && <Numbers isActive={isActive} />}
       {type === "result" && <Result isActive={isActive} />}
     </>

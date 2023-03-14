@@ -9,7 +9,7 @@ interface NumbersProps extends HTMLAttributes<HTMLDivElement> {
   isActive?: boolean;
 }
 
-const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
+const numbers = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", "."];
 
 export const Numbers: React.FC<NumbersProps> = ({
   isActive = true,

@@ -4,7 +4,7 @@ import { CalculatorElems, setDraggedElement } from "store/slices/mainSlice";
 import styles from "./Palette.module.scss";
 import cn from "classnames";
 
-const components = ["table", "digits", "numbers", "result"] as const;
+const components = ["display", "operators", "numbers", "result"] as const;
 
 export const Palette: React.FC = () => {
   const { calculatorElems } = useAppSelector((state) => state.mainSlice);

@@ -5,16 +5,14 @@ import {
   addCalcElement,
   CalculatorElems,
   removeCalcElement,
+  ScreenType,
   setDraggedElement,
 } from "store/slices/mainSlice";
 import { CalculatorEmpty } from "./CalculatorEmpty";
 import styles from "./Calculator.module.scss";
 
-interface CalculatorProps {
-  isRuntime: boolean;
-}
-
-export const Calculator: React.FC<CalculatorProps> = ({ isRuntime }) => {
+export const Calculator: React.FC = () => {
+  const { activeScreen } = useAppSelector((state) => state.mainSlice);
   const [insertIndex, setInsertIndex] = useState<number | null>(null);
   const { calculatorElems, draggedElement } = useAppSelector(
     (state) => state.mainSlice
@@ -22,7 +20,7 @@ export const Calculator: React.FC<CalculatorProps> = ({ isRuntime }) => {
   const dispatch = useAppDispatch();
 
   const removeHandler = (item: CalculatorElems) => {
-    if (isRuntime) return;
+    if (activeScreen === ScreenType.CALCULATOR) return;
     dispatch(removeCalcElement(item));
   };
 
@@ -32,16 +30,22 @@ export const Calculator: React.FC<CalculatorProps> = ({ isRuntime }) => {
 
     if (!draggedElement) return;
 
-    if (draggedElement === "table") {
-      setInsertIndex(null);
+    if (draggedElement === "display") {
+      setInsertIndex(0);
     } else if (index === undefined) {
-      setInsertIndex(calculatorElems.length - 1);
+      setInsertIndex(calculatorElems.length);
+    } else if (calculatorElems[index] === "display") {
+      setInsertIndex(index + 1);
     } else {
-      setInsertIndex(index);
+      const { height, y } = (
+        e.currentTarget as HTMLElement
+      ).getBoundingClientRect();
+
+      setInsertIndex(e.clientY - y < height / 2 ? index : index + 1);
     }
   };
 
-  const dragLeave = (e: React.DragEvent) => {
+  const dragLeave = () => {
     setInsertIndex(null);
   };
 
@@ -52,22 +56,14 @@ export const Calculator: React.FC<CalculatorProps> = ({ isRuntime }) => {
   const dropHandler = () => {
     if (!draggedElement) return;
 
-    if (
-      insertIndex !== null &&
-      calculatorElems.indexOf(draggedElement) === insertIndex
-    ) {
-      dispatch(addCalcElement(insertIndex));
-    } else {
-      dispatch(addCalcElement(insertIndex !== null ? insertIndex + 1 : null));
-    }
-
+    dispatch(addCalcElement(insertIndex));
     setInsertIndex(null);
   };
 
   if (!calculatorElems.length) {
     return (
       <div onDrop={dropHandler} onDragOver={(e) => e.preventDefault()}>
-        <CalculatorEmpty />;
+        <CalculatorEmpty />
       </div>
     );
   }
@@ -82,17 +78,26 @@ export const Calculator: React.FC<CalculatorProps> = ({ isRuntime }) => {
       {calculatorElems.map((item, index) => {
         return (
           <div
-            key={index}
+            key={item}
             onDoubleClick={() => removeHandler(item)}
-            draggable={!isRuntime && item !== "table"}
+            draggable={
+              activeScreen === ScreenType.CONSTRUCTOR && item !== "display"
+            }
             onDragStart={() => dragStart(item)}
             onDragOver={(e) => dragOver(e, index)}
+            onDragLeave={dragLeave}
           >
-            <CalculatorElements key={index} type={item} isActive={isRuntime} />
+            <CalculatorElements
+              type={item}
+              isActive={activeScreen === ScreenType.CALCULATOR}
+            />
             {index === insertIndex && <div className={styles.divider} />}
           </div>
         );
       })}
+      {insertIndex && insertIndex > calculatorElems.length - 1 ? (
+        <div className={styles.divider} />
+      ) : null}
     </div>
   );
 };

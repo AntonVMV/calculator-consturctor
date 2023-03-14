@@ -1,8 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type CalculatorElems = "table" | "digits" | "result" | "numbers";
+export type CalculatorElems = "display" | "operators" | "result" | "numbers";
 
-type ScreenType = "constructor" | "calculator";
+// type ScreenType = "constructor" | "calculator";
+export enum ScreenType {
+  CONSTRUCTOR,
+  CALCULATOR,
+}
 
 interface IState {
   activeScreen: ScreenType;
@@ -11,7 +15,7 @@ interface IState {
 }
 
 const initialState: IState = {
-  activeScreen: "constructor",
+  activeScreen: ScreenType.CONSTRUCTOR,
   draggedElement: null,
   calculatorElems: [],
 };
@@ -32,10 +36,10 @@ const mainSlice = createSlice({
 
       if (isDraggedInArray === payload) return;
 
-      if (state.draggedElement === "table") {
-        state.calculatorElems = ["table", ...state.calculatorElems];
+      if (state.draggedElement === "display") {
+        state.calculatorElems = ["display", ...state.calculatorElems];
       } else {
-        if (isDraggedInArray > 0) {
+        if (isDraggedInArray > -1) {
           state.calculatorElems.splice(isDraggedInArray, 1);
         }
         state.calculatorElems.splice(payload || 0, 0, state.draggedElement);

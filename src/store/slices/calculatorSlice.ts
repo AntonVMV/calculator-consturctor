@@ -11,6 +11,7 @@ const action = (action: ActionTypes, num1: number, num2: number) => {
     case "mult":
       return num1 * num2;
     case "divide":
+      if (num2 === 0) throw new Error("Не определено");
       return num1 / num2;
   }
 };
@@ -48,12 +49,20 @@ const calculatorSlice = createSlice({
       }
 
       if (state.prevAction) {
-        const parsed = parseFloat(state.input);
+        let parsed = parseFloat(state.input);
 
-        const result = action(state.prevAction, state.result, parsed);
-
-        state.result = result;
-        state.input = `${result}`;
+        try {
+          const result = action(state.prevAction, state.result, parsed);
+          state.result = result;
+          state.input = result.toString();
+        } catch (e) {
+          if (e instanceof Error) {
+            state.input = e.message;
+          } else {
+            state.input = "Неизвестная ошибка";
+          }
+          state.result = 0;
+        }
       }
 
       state.prevAction = null;
@@ -65,7 +74,13 @@ const calculatorSlice = createSlice({
       if (state.input.includes(".") && payload === ".") return;
 
       if ((state.input === "0" && payload !== ".") || state.nextAction) {
-        state.result = parseFloat(state.input);
+        let parsed = parseFloat(state.input);
+
+        if (isNaN(parsed)) {
+          parsed = 0;
+        }
+
+        state.result = parsed;
         state.input = "";
         state.prevAction = state.nextAction;
         state.nextAction = null;
@@ -86,10 +101,18 @@ const calculatorSlice = createSlice({
       if (state.nextAction) {
         const parsed = parseFloat(state.prevInput);
 
-        const result = action(state.nextAction, state.result, parsed);
-
-        state.result = +result.toFixed(8);
-        state.input = `${result}`;
+        try {
+          const result = action(state.nextAction, state.result, parsed);
+          state.result = result;
+          state.input = result.toString();
+        } catch (e) {
+          if (e instanceof Error) {
+            state.input = e.message;
+          } else {
+            state.input = "Неизвестная ошибка";
+          }
+          state.result = 0;
+        }
       }
     },
   },
