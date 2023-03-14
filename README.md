@@ -2,7 +2,7 @@
 
 BUID - https://calculator-consturctor.vercel.app/
 
-<img src="calc.png" alt="calc">
+<img src="calcScreen.png" alt="calc">
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
