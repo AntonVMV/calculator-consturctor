@@ -35,7 +35,6 @@ export const Operators: React.FC<DigitsProps> = ({
             text={item.text}
             key={item.type}
             onClick={() => handler(item.type)}
-            className={styles.button}
             disabled={!isActive}
           />
         );

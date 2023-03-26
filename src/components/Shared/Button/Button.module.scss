@@ -6,6 +6,7 @@
   font-weight: 500;
   font-size: 14px;
   transition: 0.2s ease;
+  padding: 8px 8px;
 
   &.secondary {
     color: #fff;
@@ -21,6 +22,14 @@
     }
   }
 
+  &.small {
+    padding: 0;
+  }
+
+  &.large {
+    padding: 16px 8px;
+  }
+
   &:hover {
     box-shadow: 0 0 0 2px #5d5fef;
     cursor: pointer;
@@ -29,5 +38,6 @@
   &:disabled {
     pointer-events: none;
     color: inherit;
+    opacity: 0.5;
   }
 }
